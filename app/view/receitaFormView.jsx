@@ -56,7 +56,7 @@ export default function ReceitaFormView() {
 const styles = StyleSheet.create({
   container: { padding: 20, gap: 10 },
   input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 10, marginBottom: 10 },
-  botao: { backgroundColor: "#1E90FF", padding: 12, borderRadius: 10, alignItems: "center" },
+  botao: { backgroundColor: "#Ffa500", padding: 12, borderRadius: 10, alignItems: "center" },
   botaoTexto: { color: "#fff", fontSize: 16 },
-  botaoVoltar: { padding: 12, borderRadius: 10, marginTop: 10, borderWidth: 1, borderColor: "#1E90FF", alignItems: "center" },
+  botaoVoltar: { padding: 12, borderRadius: 10, marginTop: 10, borderWidth: 1, alignItems: "center", backgroundColor: "#964b00", borderColor: "#000"},
 });
