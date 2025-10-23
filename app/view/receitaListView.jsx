@@ -70,10 +70,10 @@ const styles = StyleSheet.create({
   filtros: { marginVertical: 10 },
   checkboxContainer: { flexDirection: "row", alignItems: "center", marginRight: 10, gap: 5 },
   checkbox: { width: 20, height: 20, borderWidth: 1, borderColor: "#000" },
-  checkboxChecked: { backgroundColor: "#1E90FF" },
+  checkboxChecked: { backgroundColor: "#Ffa500" },
   card: { marginBottom: 15, padding: 15, borderWidth: 1, borderColor: "#ccc", borderRadius: 8 },
   cardTitle: { fontWeight: "700", fontSize: 16, marginBottom: 5 },
-  botao: { backgroundColor: "#1E90FF", padding: 12, borderRadius: 10, marginTop: 10, alignItems: "center" },
+  botao: { backgroundColor: "#Ffa500", padding: 12, borderRadius: 10, marginTop: 10, alignItems: "center", borderColor: "#000" },
   botaoTexto: { color: "#fff", fontSize: 16 },
-  botaoVoltar: { padding: 12, borderRadius: 10, marginTop: 10, borderWidth: 1, borderColor: "#1E90FF", alignItems: "center" },
+  botaoVoltar: { padding: 12, borderRadius: 10, marginTop: 10, borderWidth: 1, alignItems: "center", backgroundColor: "#964b00", borderColor: "#000"},
 });
