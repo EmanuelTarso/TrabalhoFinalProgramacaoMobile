@@ -32,7 +32,7 @@
    npm install -g expo-cli
 
 2. **Navegue até a pasta do projeto e inicie o servidor:**
-
+   ```bash
    npx expo start
 
 
