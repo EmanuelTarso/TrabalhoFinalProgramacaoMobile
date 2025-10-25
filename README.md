@@ -35,7 +35,6 @@
    ```bash
    npx expo start
 
-
 3. **Escolha o modo de execução:**
 
 - 💻 Web: pressione w
