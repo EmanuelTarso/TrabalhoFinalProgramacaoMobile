@@ -49,19 +49,19 @@
 
 🏠 **Tela Inicial**
 
-Espaço reservado para o print da tela inicial
+![Tela Menu](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaMenu.png?raw=true)
 
 📋 **Lista de Receitas**
 
-Espaço reservado para o print da lista de receitas
+![Tela Lista](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaLista.png?raw=true)
 
 ✏️ **Cadastro de Receita**
 
-Espaço reservado para o print do formulário de nova receita
+![Tela Cadastro](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaCadastro.png?raw=true)
 
 📖 **Detalhes da Receita**
 
-Espaço reservado para o print da visualização detalhada
+![Tela Detalhe](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaDetalhe.png?raw=true)
 
 💡 **Observações**
 
