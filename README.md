@@ -46,7 +46,8 @@ npx expo start
 
 4. **Pronto! O app será carregado com as telas principais.**
 
-🧩 ##Telas do Aplicativo
+🧩 ## Telas do Aplicativo
+
 🏠 -Tela Inicial
 
 Espaço reservado para o print da tela inicial
