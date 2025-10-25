@@ -48,7 +48,7 @@ npx expo start
 
 ## 🧩 Telas do Aplicativo
 
-🏠 -Tela Inicial
+🏠 **Tela Inicial**
 
 Espaço reservado para o print da tela inicial
 
