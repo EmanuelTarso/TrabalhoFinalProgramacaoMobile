@@ -10,7 +10,6 @@
 - ➕ Cadastro de novas receitas  
 - 🔍 Filtro por ingredientes e busca por nome  
 - 👀 Visualização detalhada de cada receita  
-- 💬 Dica exibida na tela de detalhes  
 - ⚙️ Estrutura organizada em **Entities**, **Services**, **Views** e **Components**
 
 ---
