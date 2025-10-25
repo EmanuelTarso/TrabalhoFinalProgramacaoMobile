@@ -44,6 +44,8 @@
 
 4. **Pronto! O app será carregado com as telas principais.**
 
+---
+
 ## 🧩 Telas do Aplicativo
 
 🏠 **Tela Inicial**
