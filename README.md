@@ -72,8 +72,3 @@ Espaço reservado para o print da visualização detalhada
 - Estrutura modular e organizada, ideal para aprendizado e expansão futura.
 
 - O componente genérico infoBox demonstra como criar componentes reutilizáveis no projeto.
-
-👨‍💻 Autor
-
-Desenvolvido por Emanuel Tarso 💡
-Projeto educacional — React Native + Expo Router
