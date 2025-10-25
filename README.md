@@ -33,7 +33,7 @@
 
 2. **Navegue até a pasta do projeto e inicie o servidor:**
 
-npx expo start
+   npx expo start
 
 
 3. **Escolha o modo de execução:**
