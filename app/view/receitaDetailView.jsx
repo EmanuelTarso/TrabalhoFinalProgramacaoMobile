@@ -35,7 +35,7 @@ export default function receitaDetailView() {
       <Text>{receita.modoPreparo}</Text>
 
       <Box title="Dica">
-        <Text>Use ingredientes frescos</Text>
+        <Text>Use ingredientes de qualidade!</Text>
       </Box>
 
       <Pressable style={styles.botaoVoltar} onPress={() => router.push("/view/receitaListView")}>
@@ -52,3 +52,4 @@ const styles = StyleSheet.create({
   botaoVoltar: { padding: 12, borderRadius: 10, marginTop: 20, borderWidth: 1, alignItems: "center", backgroundColor: "#964b00", borderColor: "#000" },
   botaoTexto: { color: "#fff", fontSize: 16 },
 });
+
