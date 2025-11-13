@@ -74,9 +74,9 @@
 
 - O componente genérico infoBox demonstra como criar componentes reutilizáveis no projeto.
 
-## **Membros do grupo**
+## **Integrantes**
 * Aquila Moreira - 202503041237
-* Emilly Nicole Teixeira Rodrigues - 202503595712
-* Letícia Bethônico Silva Ferreira - 202503604134
-* Gabriel Batista Nascimento - 202504458042
 * Emanuel Tarso de Alvarenga Maciel - 202351071971
+* Emilly Nicole Teixeira Rodrigues - 202503595712
+* Gabriel Batista Nascimento - 202504458042
+* Letícia Bethônico Silva Ferreira - 202503604134
