@@ -16,6 +16,8 @@ export default function receitaListView() {
   const [ingredientesSelecionados, setIngredientesSelecionados] = useState([]);
   const [buscaIngrediente, setBuscaIngrediente] = useState("");
 
+  const placeholder = require("../../assets/images/placeholder.png");
+
   useEffect(() => {
     async function carregar() {
       const lista = await receitaService.listar();
@@ -24,9 +26,14 @@ export default function receitaListView() {
     carregar();
   }, []);
 
+  const capitalize = (str) =>
+    str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
   const todosIngredientes = useMemo(() => {
     const set = new Set();
-    receitas.forEach((r) => r.ingredientes.forEach((i) => set.add(i)));
+    receitas.forEach((r) =>
+      r.ingredientes.forEach((i) => set.add(capitalize(i)))
+    );
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [receitas]);
 
@@ -40,7 +47,9 @@ export default function receitaListView() {
   const receitasFiltradas = useMemo(() => {
     if (ingredientesSelecionados.length === 0) return receitas;
     return receitas.filter((r) =>
-      ingredientesSelecionados.every((i) => r.ingredientes.includes(i))
+      ingredientesSelecionados.every((i) =>
+        r.ingredientes.some((ing) => capitalize(ing) === i)
+      )
     );
   }, [receitas, ingredientesSelecionados]);
 
@@ -63,27 +72,41 @@ export default function receitaListView() {
         style={styles.input}
       />
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.filtros}
-      >
-        {ingredientesFiltrados.map((i) => (
-          <Pressable
-            key={i}
-            style={styles.checkboxContainer}
-            onPress={() => toggleIngrediente(i)}
-          >
-            <View
+      <View style={styles.filtroWrapper}>
+        {ingredientesFiltrados.length > 0 && (
+          <Text style={styles.setaEsquerda}>◀</Text>
+        )}
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.filtros}
+        >
+          {ingredientesFiltrados.map((i) => (
+            <Pressable
+              key={i}
               style={[
-                styles.checkbox,
-                ingredientesSelecionados.includes(i) && styles.checkboxChecked,
+                styles.tag,
+                ingredientesSelecionados.includes(i) && styles.tagSelected,
               ]}
-            />
-            <Text>{i}</Text>
-          </Pressable>
-        ))}
-      </ScrollView>
+              onPress={() => toggleIngrediente(i)}
+            >
+              <Text
+                style={[
+                  styles.tagText,
+                  ingredientesSelecionados.includes(i) && { color: "#fff" },
+                ]}
+              >
+                {i}
+              </Text>
+            </Pressable>
+          ))}
+        </ScrollView>
+
+        {ingredientesFiltrados.length > 0 && (
+          <Text style={styles.setaDireita}>▶</Text>
+        )}
+      </View>
 
       {receitasFiltradas.length === 0 ? (
         <Text style={styles.nenhum}>Nenhuma receita encontrada</Text>
@@ -91,16 +114,17 @@ export default function receitaListView() {
         receitasFiltradas.map((r) => (
           <Pressable
             key={r.id}
-            onPress={() => router.push(`/view/receitaDetailView?id=${r.id}`)}
+            onPress={() =>
+              router.push(`/view/receitaDetailView?id=${r.id}`)
+            }
             style={styles.card}
           >
-            <Text style={styles.nome}>{r.nome}</Text>
-
+            <Text style={styles.nome}>🍴 {r.nome}</Text>
             <Text style={styles.ingredientes}>
-              Ingredientes: {r.ingredientes.join(", ")}
+              Ingredientes:{" "}
+              {r.ingredientes.map((i) => capitalize(i)).join(", ")}
             </Text>
 
-            {/* Espaço reservado */}
             <View style={styles.cardImage} />
           </Pressable>
         ))
@@ -124,7 +148,7 @@ export default function receitaListView() {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
+  container: { padding: 20, backgroundColor: "#fff8f0" }, 
   titulo: {
     fontSize: 24,
     fontWeight: "bold",
@@ -137,23 +161,54 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     marginBottom: 10,
+    backgroundColor: "#fff",
   },
-  filtros: { marginVertical: 10 },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+  filtroWrapper: {
+    position: "relative",
+    marginVertical: 10,
+  },
+  filtros: { paddingHorizontal: 25 },
+  setaEsquerda: {
+    position: "absolute",
+    left: 0,
+    top: "50%",
+    transform: [{ translateY: -10 }],
+    fontSize: 18,
+    zIndex: 10,
+  },
+  setaDireita: {
+    position: "absolute",
+    right: 0,
+    top: "50%",
+    transform: [{ translateY: -10 }],
+    fontSize: 18,
+    zIndex: 10,
+  },
+  tag: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 20,
     marginRight: 10,
-    gap: 5,
+    backgroundColor: "#fff",
   },
-  checkbox: { width: 20, height: 20, borderWidth: 1, borderColor: "#000" },
-  checkboxChecked: { backgroundColor: "#Ffa500" },
+  tagSelected: {
+    backgroundColor: "#Ffa500",
+    borderColor: "#Ffa500",
+  },
+  tagText: { fontSize: 14 },
 
   card: {
     marginBottom: 15,
     padding: 12,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
+    borderRadius: 12,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   nome: { fontWeight: "700", fontSize: 16, marginBottom: 4 },
   ingredientes: { fontSize: 14, color: "#555" },
