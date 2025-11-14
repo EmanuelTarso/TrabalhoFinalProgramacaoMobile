@@ -21,7 +21,7 @@ export default function receitaFormView() {
       nome,
       ingredientes.split(",").map(i => i.trim()),
       modoPreparo,
-      null // sem imagem
+      null
     );
 
     await receitaService.salvar(novaReceita);
@@ -31,7 +31,7 @@ export default function receitaFormView() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.titulo}>CADASTRO</Text>
+      <Text style={styles.titulo}>📝 CADASTRO DA RECEITA</Text>
 
       <TextInput
         placeholder="Nome"
@@ -57,7 +57,7 @@ export default function receitaFormView() {
 
       {/* Espaço reservado */}
       <View style={styles.preview} />
-      <Text style={{ textAlign: "center", opacity: 0.6, marginBottom: 10 }}>
+      <Text style={styles.previewLabel}>
         (Imagem desativada — usando apenas Expo padrão)
       </Text>
 
@@ -78,10 +78,22 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
+    color: "#000",
   },
-  container: { padding: 20, gap: 10 },
-  input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 8, padding: 10 },
-
+  container: { padding: 20, gap: 10, backgroundColor: "#FFF8F0" },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    color: "#000",
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+  },
   preview: {
     width: "100%",
     height: 200,
@@ -91,14 +103,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
   },
-
+  previewLabel: {
+    textAlign: "center",
+    opacity: 0.6,
+    marginVertical: 8,
+    fontStyle: "italic",
+    color: "#000",
+  },
   botao: {
     backgroundColor: "#Ffa500",
     padding: 12,
     borderRadius: 10,
     alignItems: "center",
+    marginTop: 10,
   },
-  botaoTexto: { color: "#fff", fontSize: 16 },
+  botaoTexto: { color: "#fff", fontSize: 16, fontWeight: "bold" },
   botaoVoltar: {
     padding: 12,
     borderRadius: 10,
