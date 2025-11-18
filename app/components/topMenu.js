@@ -1,4 +1,4 @@
-mport { useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 <Pressable
             style={styles.itemBox}
             onPress={() => {
