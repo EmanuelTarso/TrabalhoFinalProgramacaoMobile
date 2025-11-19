@@ -27,12 +27,24 @@ export default function receitaDetailView() {
     });
   }, [id]);
 
+  function alternarFavorito() {
+    receitaService.favoritar(receita.id).then((f) => {
+      setReceita({ ...receita, favorito: f });
+    });
+  }
+
   if (!receita) return null;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-           <Text style={styles.titulo}>👩‍🍳 Detalhes da Receita</Text>
+      <Text style={styles.titulo}>👩‍🍳 Detalhes da Receita</Text>
       <Text style={styles.title}>{receita.nome}</Text>
+
+      <Pressable style={styles.botaoFavorito} onPress={alternarFavorito}>
+        <Text style={styles.botaoTextoFavorito}>
+          {receita.favorito ? "★ Favorita" : "☆ Favoritar"}
+        </Text>
+      </Pressable>
 
       <Text style={styles.subtitle}>Ingredientes:</Text>
       {receita.ingredientes.map((i, idx) => (
@@ -48,8 +60,14 @@ export default function receitaDetailView() {
         <Text>Use ingredientes de qualidade!</Text>
       </Box>
 
-      {/* Espaço reservado para imagem */}
       <View style={styles.imagemEspaco} />
+
+      <Pressable
+        style={styles.botaoEditar}
+        onPress={() => router.push(`/view/receitaFormView?id=${receita.id}`)}
+      >
+        <Text style={styles.botaoTextoEditar}>Editar Receita ✏️</Text>
+      </Pressable>
 
       <Pressable
         style={styles.botaoVoltar}
@@ -104,6 +122,34 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+  },
+  botaoFavorito: {
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: "#ffdd00",
+    borderWidth: 1,
+    borderColor: "#000",
+    alignItems: "center",
+  },
+  botaoTextoFavorito: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  botaoEditar: {
+    padding: 12,
+    borderRadius: 10,
+    marginTop: 20,
+    alignItems: "center",
+    backgroundColor: "#0066cc",
+    borderWidth: 1,
+    borderColor: "#000",
+  },
+  botaoTextoEditar: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   botaoVoltar: {
     padding: 12,

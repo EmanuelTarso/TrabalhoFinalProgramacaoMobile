@@ -21,12 +21,13 @@ export default function receitaListView() {
   const [buscaIngrediente, setBuscaIngrediente] = useState("");
   const [somenteFavoritas, setSomenteFavoritas] = useState(false);
 
+  async function carregarReceitas() {
+    const lista = await receitaService.listar();
+    setReceitas([...lista]);
+  }
+
   useEffect(() => {
-    async function carregar() {
-      const lista = await receitaService.listar();
-      setReceitas([...lista]);
-    }
-    carregar();
+    carregarReceitas();
   }, []);
 
   const capitalize = (str) =>
@@ -70,6 +71,11 @@ export default function receitaListView() {
         : [...prev, item]
     );
   };
+
+  async function alternarFavorito(id) {
+    await receitaService.favoritar(id);
+    carregarReceitas();
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -140,11 +146,7 @@ export default function receitaListView() {
             <View key={r.id} style={styles.card}>
 
               <Pressable
-                onPress={() => {
-                  receitaService.favoritar(r.id).then(() => {
-                    setReceitas([...receitas]);
-                  });
-                }}
+                onPress={() => alternarFavorito(r.id)}
                 style={{ position: "absolute", right: 10, top: 10 }}
               >
                 <Text style={{ fontSize: 24 }}>
@@ -164,6 +166,18 @@ export default function receitaListView() {
                 </Text>
 
                 <View style={styles.cardImage} />
+              </Pressable>
+
+              {/* BOTÃO DE EDITAR */}
+              <Pressable
+                style={styles.botaoEditar}
+                onPress={() =>
+                  router.push(`/view/receitaFormView?id=${r.id}`)
+                }
+              >
+                <Text style={{ color: "#fff", fontWeight: "bold" }}>
+                  ✏️ Editar Receita
+                </Text>
               </Pressable>
             </View>
           ))
@@ -205,10 +219,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: "#fff",
   },
-
   filtroWrapper: { position: "relative", marginVertical: 10 },
   filtros: { paddingHorizontal: 25 },
-
   setaEsquerda: {
     position: "absolute",
     left: 0,
@@ -225,7 +237,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     zIndex: 10,
   },
-
   tag: {
     paddingVertical: 6,
     paddingHorizontal: 12,
@@ -240,7 +251,6 @@ const styles = StyleSheet.create({
     borderColor: "#Ffa500",
   },
   tagText: { fontSize: 14 },
-
   card: {
     marginBottom: 15,
     padding: 12,
@@ -251,7 +261,6 @@ const styles = StyleSheet.create({
   },
   nome: { fontWeight: "700", fontSize: 16, marginBottom: 4 },
   ingredientes: { fontSize: 14, color: "#555" },
-
   cardImage: {
     width: "100%",
     height: 150,
@@ -261,9 +270,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
   },
-
+  botaoEditar: {
+    marginTop: 10,
+    backgroundColor: "#964b00",
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+  },
   nenhum: { textAlign: "center", color: "#666", marginTop: 20 },
-
   botao: {
     backgroundColor: "#Ffa500",
     padding: 12,
@@ -272,7 +286,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   botaoTexto: { color: "#fff", fontSize: 16 },
-
   botaoVoltar: {
     padding: 12,
     borderRadius: 10,

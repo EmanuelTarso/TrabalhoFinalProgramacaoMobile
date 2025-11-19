@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import ReceitaEntity from "../entities/receitaEntity";
 import receitaService from "../services/receitaService";
@@ -9,9 +9,29 @@ import TopMenu from "../components/topMenu";
 
 export default function receitaFormView() {
   const router = useRouter();
+  const { id } = useLocalSearchParams(); // <-- pega ID da URL
+
   const [nome, setNome] = useState("");
   const [ingredientes, setIngredientes] = useState("");
   const [modoPreparo, setmodoPreparo] = useState("");
+  const [favorito, setFavorito] = useState(false);
+
+  // Carregar dados se for edição
+  useEffect(() => {
+    async function carregar() {
+      if (!id) return; // formulário de criação
+
+      const receita = await receitaService.buscarPorId(parseInt(id));
+      if (!receita) return;
+
+      setNome(receita.nome);
+      setIngredientes(receita.ingredientes.join(", "));
+      setmodoPreparo(receita.modoPreparo);
+      setFavorito(receita.favorito ?? false);
+    }
+
+    carregar();
+  }, [id]);
 
   const salvar = async () => {
     if (!nome || !ingredientes || !modoPreparo) {
@@ -19,16 +39,17 @@ export default function receitaFormView() {
       return;
     }
 
-    const novaReceita = new ReceitaEntity(
-      null,
+    const receita = new ReceitaEntity(
+      id ? parseInt(id) : null, // <-- se tiver ID, edita
       nome,
       ingredientes.split(",").map(i => i.trim()),
       modoPreparo,
-      null
+      favorito
     );
 
-    await receitaService.salvar(novaReceita);
-    Alert.alert("Sucesso", "Receita salva!");
+    await receitaService.salvar(receita);
+
+    Alert.alert("Sucesso", id ? "Receita atualizada!" : "Receita salva!");
     router.push("/view/receitaListView");
   };
 
@@ -37,7 +58,9 @@ export default function receitaFormView() {
       <TopMenu />
 
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.titulo}>📝 CADASTRO DA RECEITA</Text>
+        <Text style={styles.titulo}>
+          {id ? "✏️ EDITAR RECEITA" : "📝 CADASTRO DA RECEITA"}
+        </Text>
 
         <TextInput
           placeholder="Nome"
@@ -61,13 +84,8 @@ export default function receitaFormView() {
           style={[styles.input, { height: 120 }]}
         />
 
-        <View style={styles.preview} />
-        <Text style={styles.previewLabel}>
-          (Imagem desativada — usando apenas Expo padrão)
-        </Text>
-
         <Pressable style={styles.botao} onPress={salvar}>
-          <Text style={styles.botaoTexto}>Salvar</Text>
+          <Text style={styles.botaoTexto}>{id ? "Salvar Alterações" : "Salvar"}</Text>
         </Pressable>
 
         <Pressable style={styles.botaoVoltar} onPress={() => router.push("/")}>
@@ -97,22 +115,6 @@ const styles = StyleSheet.create({
     color: "#000",
     backgroundColor: "#fff",
     elevation: 1,
-  },
-  preview: {
-    width: "100%",
-    height: 200,
-    marginTop: 10,
-    borderRadius: 10,
-    backgroundColor: "#eee",
-    borderWidth: 1,
-    borderColor: "#ddd",
-  },
-  previewLabel: {
-    textAlign: "center",
-    opacity: 0.6,
-    marginVertical: 8,
-    fontStyle: "italic",
-    color: "#000",
   },
   botao: {
     backgroundColor: "#Ffa500",
