@@ -95,7 +95,7 @@
 ## 📑 PDF Explicativo
 
 Para mais detalhes sobre o projeto, consulte o PDF explicativo:  
-[📄 Abrir PDF]([https://drive.google.com/file/d/1r1Gr7tKWOMqJoN1JSpFbogos88d3T3ZT/view?usp=drive_link](https://www.canva.com/design/DAG5GE80zsw/EBzzg4ch09Yuub3LuV-QAQ/view?utm_content=DAG5GE80zsw&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=heda69239de))
+[📄 Abrir PDF](https://www.canva.com/design/DAG5GE80zsw/ULUedVAEBPsWKjMQLetoNQ/edit?utm_content=DAG5GE80zsw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 
 ---
