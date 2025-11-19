@@ -76,6 +76,10 @@
 
 ![Tela Edição](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaEdicao.png?raw=true)
 
+☰ **Menu Superior**
+
+![Menu Superior](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/MenuSuperior.png?raw=true)
+
 ---
 
 💡 **Observações**
