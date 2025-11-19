@@ -74,6 +74,8 @@
 
 ![Tela Edição](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaEdicao.png?raw=true)
 
+---
+
 💡 **Observações**
 
 - Os dados das receitas são armazenados localmente (em memória) no arquivo receitaService.js.
