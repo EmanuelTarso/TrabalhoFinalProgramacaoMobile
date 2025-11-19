@@ -32,11 +32,15 @@
    ```bash
    npm install -g expo-cli
 
-2. **Navegue até a pasta do projeto e inicie o servidor:**
+2. **Navegue até a pasta do projeto**
+   ```bash
+   cd caminho/para/pasta/do/projeto
+   
+3. **Inicie o Servidor**
    ```bash
    npx expo start
 
-3. **Escolha o modo de execução:**
+4. **Escolha o modo de execução:**
 
 - 💻 Web: pressione w
 
@@ -44,7 +48,7 @@
 
 - 🍎 iOS: pressione i
 
-4. **Pronto! O app será carregado com as telas principais.**
+5. **Pronto! O app será carregado com as telas principais.**
 
 ---
 
@@ -65,6 +69,10 @@
 📖 **Detalhes da Receita**
 
 ![Tela Detalhe](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaDetalhe.png?raw=true)
+
+✏️ **Editar Receita**
+
+![Tela Edição](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaEdicao.png?raw=true)
 
 💡 **Observações**
 
