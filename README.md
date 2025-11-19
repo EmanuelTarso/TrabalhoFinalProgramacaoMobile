@@ -1,5 +1,7 @@
 # 🍳 Rango Certo
 
+![Logo](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/Logo.png?raw=true)
+
 **Rango Certo** é um aplicativo simples desenvolvido em **React Native com Expo Router**, que permite ao usuário **cadastrar, visualizar e filtrar receitas** de forma prática e intuitiva.
 
 ---
