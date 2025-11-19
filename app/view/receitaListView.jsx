@@ -21,13 +21,12 @@ export default function receitaListView() {
   const [buscaIngrediente, setBuscaIngrediente] = useState("");
   const [somenteFavoritas, setSomenteFavoritas] = useState(false);
 
-  async function carregarReceitas() {
-    const lista = await receitaService.listar();
-    setReceitas([...lista]);
-  }
-
   useEffect(() => {
-    carregarReceitas();
+    async function carregar() {
+      const lista = await receitaService.listar();
+      setReceitas([...lista]);
+    }
+    carregar();
   }, []);
 
   const capitalize = (str) =>
@@ -72,130 +71,93 @@ export default function receitaListView() {
     );
   };
 
-  async function alternarFavorito(id) {
-    await receitaService.favoritar(id);
-    carregarReceitas();
-  }
-
   return (
     <View style={{ flex: 1 }}>
       <TopMenu />
 
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.titulo}>Receitas</Text>
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <View style={styles.container}>
+          <Text style={styles.titulo}>Receitas</Text>
 
-        <TextInput
-          placeholder="Buscar ingrediente"
-          value={buscaIngrediente}
-          onChangeText={setBuscaIngrediente}
-          style={styles.input}
-        />
+          <TextInput
+            placeholder="Buscar ingrediente"
+            value={buscaIngrediente}
+            onChangeText={setBuscaIngrediente}
+            style={styles.input}
+          />
 
-        <Pressable
-          style={[
-            styles.botao,
-            somenteFavoritas && { backgroundColor: "#c97c00" },
-          ]}
-          onPress={() => setSomenteFavoritas(!somenteFavoritas)}
-        >
-          <Text style={styles.botaoTexto}>
-            {somenteFavoritas ? "Mostrar Todas" : "Mostrar Favoritas ⭐"}
-          </Text>
-        </Pressable>
-
-        <View style={styles.filtroWrapper}>
-          {ingredientesFiltrados.length > 0 && (
-            <Text style={styles.setaEsquerda}>◀</Text>
-          )}
-
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.filtros}
+          <Pressable
+            style={[styles.botao, somenteFavoritas && { backgroundColor: "#c97c00" }]}
+            onPress={() => setSomenteFavoritas(!somenteFavoritas)}
           >
-            {ingredientesFiltrados.map((i) => (
-              <Pressable
-                key={i}
-                style={[
-                  styles.tag,
-                  ingredientesSelecionados.includes(i) && styles.tagSelected,
-                ]}
-                onPress={() => toggleIngrediente(i)}
-              >
-                <Text
-                  style={[
-                    styles.tagText,
-                    ingredientesSelecionados.includes(i) && { color: "#fff" },
-                  ]}
+            <Text style={styles.botaoTexto}>
+              {somenteFavoritas ? "Mostrar Todas" : "Mostrar Favoritas ⭐"}
+            </Text>
+          </Pressable>
+
+          <View style={styles.filtroWrapper}>
+            {ingredientesFiltrados.length > 0 && <Text style={styles.setaEsquerda}>◀</Text>}
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.filtros}
+            >
+              {ingredientesFiltrados.map((i) => (
+                <Pressable
+                  key={i}
+                  style={[styles.tag, ingredientesSelecionados.includes(i) && styles.tagSelected]}
+                  onPress={() => toggleIngrediente(i)}
                 >
-                  {i}
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
+                  <Text
+                    style={[styles.tagText, ingredientesSelecionados.includes(i) && { color: "#fff" }]}
+                  >
+                    {i}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
 
-          {ingredientesFiltrados.length > 0 && (
-            <Text style={styles.setaDireita}>▶</Text>
+            {ingredientesFiltrados.length > 0 && <Text style={styles.setaDireita}>▶</Text>}
+          </View>
+
+          {receitasFiltradas.length === 0 ? (
+            <Text style={styles.nenhum}>Nenhuma receita encontrada</Text>
+          ) : (
+            receitasFiltradas.map((r) => (
+              <View key={r.id} style={styles.card}>
+                <Pressable
+                  onPress={() => {
+                    receitaService.favoritar(r.id).then(() => {
+                      setReceitas([...receitas]);
+                    });
+                  }}
+                  style={{ position: "absolute", right: 10, top: 10 }}
+                >
+                  <Text style={{ fontSize: 24 }}>{r.favorito ? "⭐" : "☆"}</Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={() => router.push(`/view/receitaDetailView?id=${r.id}`)}
+                >
+                  <Text style={styles.nome}>🍴 {r.nome}</Text>
+                  <Text style={styles.ingredientes}>
+                    Ingredientes: {r.ingredientes.map((i) => capitalize(i)).join(", ")}
+                  </Text>
+                  <View style={styles.cardImage} />
+                </Pressable>
+              </View>
+            ))
           )}
+
+          <Pressable style={styles.botao} onPress={() => router.push("/view/receitaFormView")}>
+            <Text style={styles.botaoTexto}>Nova Receita</Text>
+          </Pressable>
+
+          <Pressable style={styles.botaoVoltar} onPress={() => router.push("/")}>
+            <Text style={styles.botaoTexto}>Voltar ao Menu</Text>
+          </Pressable>
         </View>
-
-        {receitasFiltradas.length === 0 ? (
-          <Text style={styles.nenhum}>Nenhuma receita encontrada</Text>
-        ) : (
-          receitasFiltradas.map((r) => (
-            <View key={r.id} style={styles.card}>
-
-              <Pressable
-                onPress={() => alternarFavorito(r.id)}
-                style={{ position: "absolute", right: 10, top: 10 }}
-              >
-                <Text style={{ fontSize: 24 }}>
-                  {r.favorito ? "⭐" : "☆"}
-                </Text>
-              </Pressable>
-
-              <Pressable
-                onPress={() =>
-                  router.push(`/view/receitaDetailView?id=${r.id}`)
-                }
-              >
-                <Text style={styles.nome}>🍴 {r.nome}</Text>
-                <Text style={styles.ingredientes}>
-                  Ingredientes:{" "}
-                  {r.ingredientes.map((i) => capitalize(i)).join(", ")}
-                </Text>
-
-                <View style={styles.cardImage} />
-              </Pressable>
-
-              {/* BOTÃO DE EDITAR */}
-              <Pressable
-                style={styles.botaoEditar}
-                onPress={() =>
-                  router.push(`/view/receitaFormView?id=${r.id}`)
-                }
-              >
-                <Text style={{ color: "#fff", fontWeight: "bold" }}>
-                  ✏️ Editar Receita
-                </Text>
-              </Pressable>
-            </View>
-          ))
-        )}
-
-        <Pressable
-          style={styles.botao}
-          onPress={() => router.push("/view/receitaFormView")}
-        >
-          <Text style={styles.botaoTexto}>Nova Receita</Text>
-        </Pressable>
-
-        <Pressable
-          style={styles.botaoVoltar}
-          onPress={() => router.push("/")}
-        >
-          <Text style={styles.botaoTexto}>Voltar ao Menu</Text>
-        </Pressable>
       </ScrollView>
 
       <Rodape />
@@ -204,95 +166,29 @@ export default function receitaListView() {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, backgroundColor: "#fff8f0" },
-  titulo: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 15,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 10,
-    backgroundColor: "#fff",
-  },
+  scroll: { flexGrow: 1 },
+  container: { flex: 1, padding: 20, backgroundColor: "#fff8f0" },
+  titulo: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 15 },
+  input: { borderWidth: 1, borderColor: "#ccc", padding: 10, borderRadius: 8, marginBottom: 10, backgroundColor: "#fff" },
+
   filtroWrapper: { position: "relative", marginVertical: 10 },
   filtros: { paddingHorizontal: 25 },
-  setaEsquerda: {
-    position: "absolute",
-    left: 0,
-    top: "50%",
-    transform: [{ translateY: -10 }],
-    fontSize: 18,
-    zIndex: 10,
-  },
-  setaDireita: {
-    position: "absolute",
-    right: 0,
-    top: "50%",
-    transform: [{ translateY: -10 }],
-    fontSize: 18,
-    zIndex: 10,
-  },
-  tag: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 20,
-    marginRight: 10,
-    backgroundColor: "#fff",
-  },
-  tagSelected: {
-    backgroundColor: "#Ffa500",
-    borderColor: "#Ffa500",
-  },
+  setaEsquerda: { position: "absolute", left: 0, top: "50%", transform: [{ translateY: -10 }], fontSize: 18, zIndex: 10 },
+  setaDireita: { position: "absolute", right: 0, top: "50%", transform: [{ translateY: -10 }], fontSize: 18, zIndex: 10 },
+
+  tag: { paddingVertical: 6, paddingHorizontal: 12, borderWidth: 1, borderColor: "#ccc", borderRadius: 20, marginRight: 10, backgroundColor: "#fff" },
+  tagSelected: { backgroundColor: "#Ffa500", borderColor: "#Ffa500" },
   tagText: { fontSize: 14 },
-  card: {
-    marginBottom: 15,
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: "#fff",
-    elevation: 3,
-    position: "relative",
-  },
+
+  card: { marginBottom: 15, padding: 12, borderRadius: 12, backgroundColor: "#fff", elevation: 3, position: "relative" },
   nome: { fontWeight: "700", fontSize: 16, marginBottom: 4 },
   ingredientes: { fontSize: 14, color: "#555" },
-  cardImage: {
-    width: "100%",
-    height: 150,
-    marginTop: 10,
-    borderRadius: 8,
-    backgroundColor: "#f0f0f0",
-    borderWidth: 1,
-    borderColor: "#ddd",
-  },
-  botaoEditar: {
-    marginTop: 10,
-    backgroundColor: "#964b00",
-    padding: 10,
-    borderRadius: 8,
-    alignItems: "center",
-  },
+  cardImage: { width: "100%", height: 150, marginTop: 10, borderRadius: 8, backgroundColor: "#f0f0f0", borderWidth: 1, borderColor: "#ddd" },
+
   nenhum: { textAlign: "center", color: "#666", marginTop: 20 },
-  botao: {
-    backgroundColor: "#Ffa500",
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 10,
-    alignItems: "center",
-  },
+
+  botao: { backgroundColor: "#Ffa500", padding: 12, borderRadius: 10, marginTop: 10, alignItems: "center" },
   botaoTexto: { color: "#fff", fontSize: 16 },
-  botaoVoltar: {
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 10,
-    borderWidth: 1,
-    alignItems: "center",
-    backgroundColor: "#964b00",
-    borderColor: "#000",
-  },
+
+  botaoVoltar: { padding: 12, borderRadius: 10, marginTop: 10, borderWidth: 1, alignItems: "center", backgroundColor: "#964b00", borderColor: "#000" },
 });
