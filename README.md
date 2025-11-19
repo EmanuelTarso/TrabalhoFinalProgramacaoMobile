@@ -92,7 +92,7 @@
 
 ---
 
-[📄 PDF Explicativo]([https://link-do-seu-pdf](https://drive.google.com/file/d/1r1Gr7tKWOMqJoN1JSpFbogos88d3T3ZT/view?usp=drive_link))
+[📄 PDF Explicativo](https://link-do-seu-pdf](https://drive.google.com/file/d/1r1Gr7tKWOMqJoN1JSpFbogos88d3T3ZT/view?usp=drive_link))
 
 ---
 
