@@ -43,8 +43,19 @@ export default {
     return Promise.resolve();
   },
 
+  favoritar(id) {
+    const r = receitas.find(x => x.id === id);
+    r.favorito = !r.favorito;
+    return Promise.resolve(r.favorito);
+  },
+
+  excluir(id) {
+    receitas = receitas.filter(r => r.id !== id);
+    return Promise.resolve();
+  },
+
   obterPorId(id) {
     const receita = receitas.find(r => r.id === Number(id));
     return Promise.resolve(receita);
-  },
+  }
 };
