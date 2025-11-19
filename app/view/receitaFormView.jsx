@@ -1,5 +1,5 @@
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import ReceitaEntity from "../entities/receitaEntity";
 import receitaService from "../services/receitaService";
@@ -9,29 +9,9 @@ import TopMenu from "../components/topMenu";
 
 export default function receitaFormView() {
   const router = useRouter();
-  const { id } = useLocalSearchParams(); // <-- pega ID da URL
-
   const [nome, setNome] = useState("");
   const [ingredientes, setIngredientes] = useState("");
   const [modoPreparo, setmodoPreparo] = useState("");
-  const [favorito, setFavorito] = useState(false);
-
-  // Carregar dados se for edição
-  useEffect(() => {
-    async function carregar() {
-      if (!id) return; // formulário de criação
-
-      const receita = await receitaService.buscarPorId(parseInt(id));
-      if (!receita) return;
-
-      setNome(receita.nome);
-      setIngredientes(receita.ingredientes.join(", "));
-      setmodoPreparo(receita.modoPreparo);
-      setFavorito(receita.favorito ?? false);
-    }
-
-    carregar();
-  }, [id]);
 
   const salvar = async () => {
     if (!nome || !ingredientes || !modoPreparo) {
@@ -39,28 +19,25 @@ export default function receitaFormView() {
       return;
     }
 
-    const receita = new ReceitaEntity(
-      id ? parseInt(id) : null, // <-- se tiver ID, edita
+    const novaReceita = new ReceitaEntity(
+      null,
       nome,
       ingredientes.split(",").map(i => i.trim()),
       modoPreparo,
-      favorito
+      null
     );
 
-    await receitaService.salvar(receita);
-
-    Alert.alert("Sucesso", id ? "Receita atualizada!" : "Receita salva!");
+    await receitaService.salvar(novaReceita);
+    Alert.alert("Sucesso", "Receita salva!");
     router.push("/view/receitaListView");
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.wrapper}>
       <TopMenu />
 
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.titulo}>
-          {id ? "✏️ EDITAR RECEITA" : "📝 CADASTRO DA RECEITA"}
-        </Text>
+        <Text style={styles.titulo}>📝 CADASTRO DA RECEITA</Text>
 
         <TextInput
           placeholder="Nome"
@@ -84,8 +61,13 @@ export default function receitaFormView() {
           style={[styles.input, { height: 120 }]}
         />
 
+        <View style={styles.preview} />
+        <Text style={styles.previewLabel}>
+          (Imagem desativada — usando apenas Expo padrão)
+        </Text>
+
         <Pressable style={styles.botao} onPress={salvar}>
-          <Text style={styles.botaoTexto}>{id ? "Salvar Alterações" : "Salvar"}</Text>
+          <Text style={styles.botaoTexto}>Salvar</Text>
         </Pressable>
 
         <Pressable style={styles.botaoVoltar} onPress={() => router.push("/")}>
@@ -99,6 +81,18 @@ export default function receitaFormView() {
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: "#FFF8F0",
+  },
+
+  container: {
+    flexGrow: 1,
+    padding: 20,
+    gap: 12,
+    justifyContent: "flex-start",
+  },
+
   titulo: {
     fontSize: 24,
     fontWeight: "bold",
@@ -106,31 +100,57 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: "#000",
   },
-  container: { padding: 20, gap: 10, backgroundColor: "#FFF8F0" },
+
   input: {
+    width: "100%",
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 8,
-    padding: 10,
-    color: "#000",
+    padding: 12,
     backgroundColor: "#fff",
+    color: "#000",
     elevation: 1,
   },
-  botao: {
-    backgroundColor: "#Ffa500",
-    padding: 12,
+
+  preview: {
+    width: "100%",
+    height: 200,
     borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  botaoTexto: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  botaoVoltar: {
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 10,
+    backgroundColor: "#eee",
     borderWidth: 1,
+    borderColor: "#ddd",
+    marginTop: 5,
+  },
+
+  previewLabel: {
+    textAlign: "center",
+    opacity: 0.6,
+    fontStyle: "italic",
+    color: "#000",
+  },
+
+  botao: {
+    width: "100%",
+    backgroundColor: "#Ffa500",
+    padding: 14,
+    borderRadius: 10,
     alignItems: "center",
+  },
+
+  botaoTexto: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  botaoVoltar: {
+    width: "100%",
+    padding: 14,
+    borderRadius: 10,
+    marginTop: 10,
     backgroundColor: "#964b00",
+    borderWidth: 1,
     borderColor: "#000",
+    alignItems: "center",
   },
 });
