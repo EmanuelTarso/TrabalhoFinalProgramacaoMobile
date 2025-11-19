@@ -9,18 +9,20 @@
 - ✅ Listagem de receitas existentes  
 - ➕ Cadastro de novas receitas  
 - 🔍 Filtro por ingredientes e busca por nome  
+- ⭐ Marcar/Desmarcar receitas como favoritas  
+- ❌ Exclusão de receitas  
 - 👀 Visualização detalhada de cada receita  
-- ⚙️ Estrutura organizada em **Entities**, **Services**, **Views** e **Components**
+- ⚙️ Estrutura organizada em **Entities**, **Services**, **Views** e **Components**  
 
 ---
 
 ## 🧠 Tecnologias Utilizadas
 
-- **React Native**
-- **Expo Router**
-- **JavaScript (ES6)**
-- **React Hooks (useState, useEffect, useMemo)**
-- **Sem dependências externas adicionais**
+- **React Native**  
+- **Expo Router**  
+- **JavaScript (ES6)**  
+- **React Hooks** (`useState`, `useEffect`, `useMemo`)  
+- **Sem dependências externas adicionais**  
 
 ---
 
@@ -72,7 +74,6 @@
 
 - Estrutura modular e organizada, ideal para aprendizado e expansão futura.
 
-- O componente genérico infoBox demonstra como criar componentes reutilizáveis no projeto.
 
 ## **Integrantes**
 * Aquila Moreira - 202503041237
