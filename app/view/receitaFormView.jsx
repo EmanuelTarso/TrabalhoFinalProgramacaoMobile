@@ -4,6 +4,9 @@ import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 
 import ReceitaEntity from "../entities/receitaEntity";
 import receitaService from "../services/receitaService";
 
+import Rodape from "../components/rodape";
+import TopMenu from "../components/topMenu";
+
 export default function receitaFormView() {
   const router = useRouter();
   const [nome, setNome] = useState("");
@@ -30,45 +33,50 @@ export default function receitaFormView() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.titulo}>📝 CADASTRO DA RECEITA</Text>
+    <View style={{ flex: 1 }}>
+      <TopMenu />
 
-      <TextInput
-        placeholder="Nome"
-        value={nome}
-        onChangeText={setNome}
-        style={styles.input}
-      />
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.titulo}>📝 CADASTRO DA RECEITA</Text>
 
-      <TextInput
-        placeholder="Ingredientes (separados por vírgula)"
-        value={ingredientes}
-        onChangeText={setIngredientes}
-        style={styles.input}
-      />
+        <TextInput
+          placeholder="Nome"
+          value={nome}
+          onChangeText={setNome}
+          style={styles.input}
+        />
 
-      <TextInput
-        placeholder="Modo de preparo"
-        value={modoPreparo}
-        onChangeText={setmodoPreparo}
-        multiline
-        style={[styles.input, { height: 120 }]}
-      />
+        <TextInput
+          placeholder="Ingredientes (separados por vírgula)"
+          value={ingredientes}
+          onChangeText={setIngredientes}
+          style={styles.input}
+        />
 
-      {/* Espaço reservado */}
-      <View style={styles.preview} />
-      <Text style={styles.previewLabel}>
-        (Imagem desativada — usando apenas Expo padrão)
-      </Text>
+        <TextInput
+          placeholder="Modo de preparo"
+          value={modoPreparo}
+          onChangeText={setmodoPreparo}
+          multiline
+          style={[styles.input, { height: 120 }]}
+        />
 
-      <Pressable style={styles.botao} onPress={salvar}>
-        <Text style={styles.botaoTexto}>Salvar</Text>
-      </Pressable>
+        <View style={styles.preview} />
+        <Text style={styles.previewLabel}>
+          (Imagem desativada — usando apenas Expo padrão)
+        </Text>
 
-      <Pressable style={styles.botaoVoltar} onPress={() => router.push("/")}>
-        <Text style={styles.botaoTexto}>Voltar ao Menu</Text>
-      </Pressable>
-    </ScrollView>
+        <Pressable style={styles.botao} onPress={salvar}>
+          <Text style={styles.botaoTexto}>Salvar</Text>
+        </Pressable>
+
+        <Pressable style={styles.botaoVoltar} onPress={() => router.push("/")}>
+          <Text style={styles.botaoTexto}>Voltar ao Menu</Text>
+        </Pressable>
+      </ScrollView>
+
+      <Rodape />
+    </View>
   );
 }
 
@@ -88,10 +96,6 @@ const styles = StyleSheet.create({
     padding: 10,
     color: "#000",
     backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
     elevation: 1,
   },
   preview: {
