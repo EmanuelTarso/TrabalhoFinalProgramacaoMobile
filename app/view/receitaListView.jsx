@@ -10,18 +10,21 @@ import {
 } from "react-native";
 import receitaService from "../services/receitaService";
 
+import Rodape from "../components/rodape";
+import TopMenu from "../components/topMenu";
+
 export default function receitaListView() {
   const router = useRouter();
+
   const [receitas, setReceitas] = useState([]);
   const [ingredientesSelecionados, setIngredientesSelecionados] = useState([]);
   const [buscaIngrediente, setBuscaIngrediente] = useState("");
-
-  const placeholder = require("../../assets/images/placeholder.png");
+  const [somenteFavoritas, setSomenteFavoritas] = useState(false);
 
   useEffect(() => {
     async function carregar() {
       const lista = await receitaService.listar();
-      setReceitas(lista);
+      setReceitas([...lista]);
     }
     carregar();
   }, []);
@@ -45,13 +48,20 @@ export default function receitaListView() {
   }, [buscaIngrediente, todosIngredientes]);
 
   const receitasFiltradas = useMemo(() => {
-    if (ingredientesSelecionados.length === 0) return receitas;
-    return receitas.filter((r) =>
+    let lista = receitas;
+
+    if (somenteFavoritas) {
+      lista = lista.filter((r) => r.favorito);
+    }
+
+    if (ingredientesSelecionados.length === 0) return lista;
+
+    return lista.filter((r) =>
       ingredientesSelecionados.every((i) =>
         r.ingredientes.some((ing) => capitalize(ing) === i)
       )
     );
-  }, [receitas, ingredientesSelecionados]);
+  }, [receitas, ingredientesSelecionados, somenteFavoritas]);
 
   const toggleIngrediente = (item) => {
     setIngredientesSelecionados((prev) =>
@@ -62,93 +72,125 @@ export default function receitaListView() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.titulo}>Receitas</Text>
+    <View style={{ flex: 1 }}>
+      <TopMenu />
 
-      <TextInput
-        placeholder="Buscar ingrediente"
-        value={buscaIngrediente}
-        onChangeText={setBuscaIngrediente}
-        style={styles.input}
-      />
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.titulo}>Receitas</Text>
 
-      <View style={styles.filtroWrapper}>
-        {ingredientesFiltrados.length > 0 && (
-          <Text style={styles.setaEsquerda}>◀</Text>
-        )}
+        <TextInput
+          placeholder="Buscar ingrediente"
+          value={buscaIngrediente}
+          onChangeText={setBuscaIngrediente}
+          style={styles.input}
+        />
 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.filtros}
+        <Pressable
+          style={[
+            styles.botao,
+            somenteFavoritas && { backgroundColor: "#c97c00" },
+          ]}
+          onPress={() => setSomenteFavoritas(!somenteFavoritas)}
         >
-          {ingredientesFiltrados.map((i) => (
-            <Pressable
-              key={i}
-              style={[
-                styles.tag,
-                ingredientesSelecionados.includes(i) && styles.tagSelected,
-              ]}
-              onPress={() => toggleIngrediente(i)}
-            >
-              <Text
-                style={[
-                  styles.tagText,
-                  ingredientesSelecionados.includes(i) && { color: "#fff" },
-                ]}
-              >
-                {i}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
+          <Text style={styles.botaoTexto}>
+            {somenteFavoritas ? "Mostrar Todas" : "Mostrar Favoritas ⭐"}
+          </Text>
+        </Pressable>
 
-        {ingredientesFiltrados.length > 0 && (
-          <Text style={styles.setaDireita}>▶</Text>
-        )}
-      </View>
+        <View style={styles.filtroWrapper}>
+          {ingredientesFiltrados.length > 0 && (
+            <Text style={styles.setaEsquerda}>◀</Text>
+          )}
 
-      {receitasFiltradas.length === 0 ? (
-        <Text style={styles.nenhum}>Nenhuma receita encontrada</Text>
-      ) : (
-        receitasFiltradas.map((r) => (
-          <Pressable
-            key={r.id}
-            onPress={() =>
-              router.push(`/view/receitaDetailView?id=${r.id}`)
-            }
-            style={styles.card}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.filtros}
           >
-            <Text style={styles.nome}>🍴 {r.nome}</Text>
-            <Text style={styles.ingredientes}>
-              Ingredientes:{" "}
-              {r.ingredientes.map((i) => capitalize(i)).join(", ")}
-            </Text>
+            {ingredientesFiltrados.map((i) => (
+              <Pressable
+                key={i}
+                style={[
+                  styles.tag,
+                  ingredientesSelecionados.includes(i) && styles.tagSelected,
+                ]}
+                onPress={() => toggleIngrediente(i)}
+              >
+                <Text
+                  style={[
+                    styles.tagText,
+                    ingredientesSelecionados.includes(i) && { color: "#fff" },
+                  ]}
+                >
+                  {i}
+                </Text>
+              </Pressable>
+            ))}
+          </ScrollView>
 
-            <View style={styles.cardImage} />
-          </Pressable>
-        ))
-      )}
+          {ingredientesFiltrados.length > 0 && (
+            <Text style={styles.setaDireita}>▶</Text>
+          )}
+        </View>
 
-      <Pressable
-        style={styles.botao}
-        onPress={() => router.push("/view/receitaFormView")}
-      >
-        <Text style={styles.botaoTexto}>Nova Receita</Text>
-      </Pressable>
+        {receitasFiltradas.length === 0 ? (
+          <Text style={styles.nenhum}>Nenhuma receita encontrada</Text>
+        ) : (
+          receitasFiltradas.map((r) => (
+            <View key={r.id} style={styles.card}>
 
-      <Pressable
-        style={styles.botaoVoltar}
-        onPress={() => router.push("/")}
-      >
-        <Text style={styles.botaoTexto}>Voltar ao Menu</Text>
-      </Pressable>
-    </ScrollView>
+              <Pressable
+                onPress={() => {
+                  receitaService.favoritar(r.id).then(() => {
+                    setReceitas([...receitas]);
+                  });
+                }}
+                style={{ position: "absolute", right: 10, top: 10 }}
+              >
+                <Text style={{ fontSize: 24 }}>
+                  {r.favorito ? "⭐" : "☆"}
+                </Text>
+              </Pressable>
+
+              <Pressable
+                onPress={() =>
+                  router.push(`/view/receitaDetailView?id=${r.id}`)
+                }
+              >
+                <Text style={styles.nome}>🍴 {r.nome}</Text>
+                <Text style={styles.ingredientes}>
+                  Ingredientes:{" "}
+                  {r.ingredientes.map((i) => capitalize(i)).join(", ")}
+                </Text>
+
+                <View style={styles.cardImage} />
+              </Pressable>
+            </View>
+          ))
+        )}
+
+        <Pressable
+          style={styles.botao}
+          onPress={() => router.push("/view/receitaFormView")}
+        >
+          <Text style={styles.botaoTexto}>Nova Receita</Text>
+        </Pressable>
+
+        <Pressable
+          style={styles.botaoVoltar}
+          onPress={() => router.push("/")}
+        >
+          <Text style={styles.botaoTexto}>Voltar ao Menu</Text>
+        </Pressable>
+      </ScrollView>
+
+      <Rodape />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, backgroundColor: "#fff8f0" }, 
+  container: { padding: 20, backgroundColor: "#fff8f0" },
   titulo: {
     fontSize: 24,
     fontWeight: "bold",
@@ -163,11 +205,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: "#fff",
   },
-  filtroWrapper: {
-    position: "relative",
-    marginVertical: 10,
-  },
+
+  filtroWrapper: { position: "relative", marginVertical: 10 },
   filtros: { paddingHorizontal: 25 },
+
   setaEsquerda: {
     position: "absolute",
     left: 0,
@@ -184,6 +225,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     zIndex: 10,
   },
+
   tag: {
     paddingVertical: 6,
     paddingHorizontal: 12,
@@ -204,11 +246,8 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 12,
     backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
     elevation: 3,
+    position: "relative",
   },
   nome: { fontWeight: "700", fontSize: 16, marginBottom: 4 },
   ingredientes: { fontSize: 14, color: "#555" },
@@ -224,6 +263,7 @@ const styles = StyleSheet.create({
   },
 
   nenhum: { textAlign: "center", color: "#666", marginTop: 20 },
+
   botao: {
     backgroundColor: "#Ffa500",
     padding: 12,
@@ -232,6 +272,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   botaoTexto: { color: "#fff", fontSize: 16 },
+
   botaoVoltar: {
     padding: 12,
     borderRadius: 10,
