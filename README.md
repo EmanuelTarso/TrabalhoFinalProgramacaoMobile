@@ -62,7 +62,7 @@
 
 📋 **Lista de Receitas**
 
-![Tela Lista](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaLista.png?raw=true)
+![Tela Lista](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaLista1.png?raw=true)
 
 ✏️ **Cadastro de Receita**
 
@@ -70,7 +70,7 @@
 
 📖 **Detalhes da Receita**
 
-![Tela Detalhe](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaDetalhe.png?raw=true)
+![Tela Detalhe](https://github.com/EmanuelTarso/TrabalhoFinalProgramacaoMobile/blob/main/images/TelaDetalhe1.png?raw=true)
 
 ✏️ **Editar Receita**
 
